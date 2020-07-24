@@ -1,7 +1,37 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"github.com/sudosean/shodan/pkg/shodan"
+	"log"
+	"os"
+)
 
-func main()  {
+func main() {
 	fmt.Println("Shodan Client")
+
+	if len(os.Args) != 2 {
+		log.Fatalln("Useage: shodan searchterm")
+	}
+	apiKey := os.Getenv("SHODAN_API_KEY")
+	s := shodan.New(apiKey)
+	info, err := s.APIInfo()
+	if err != nil {
+		log.Panicln(err)
+	}
+	fmt.Printf(
+		"Query Credits: %d\nScan Credits %d \n\n",
+		info.QueryCredits,
+		info.ScanCredits,
+	)
+	hostSearch, err := s.HostSearch(os.Args[1])
+	if err != nil {
+		log.Panicln(err)
+	}
+	for _, host := range hostSearch.Matches {
+		fmt.Printf("%18s%8d\n", host.IPString, host.Port)
+		for _, hostname := range host.Hostnames {
+			fmt.Printf("%18s", hostname)
+		}
+	}
 }
