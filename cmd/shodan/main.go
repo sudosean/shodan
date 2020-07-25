@@ -13,7 +13,7 @@ func main() {
 	if len(os.Args) != 2 {
 		log.Fatalln("Useage: shodan searchterm")
 	}
-	apiKey := os.Getenv("SHODAN_API_KEY")
+	apiKey :=  "INSERT_API_KEY_HERE" //os.Getenv("SHODAN_API_KEY")
 	s := shodan.New(apiKey)
 	info, err := s.APIInfo()
 	if err != nil {
@@ -30,8 +30,10 @@ func main() {
 	}
 	for _, host := range hostSearch.Matches {
 		fmt.Printf("%18s%8d\n", host.IPString, host.Port)
-		for _, hostname := range host.Hostnames {
-			fmt.Printf("%18s", hostname)
+	}
+	for _, host := range hostSearch.Matches {
+		for _, domain := range host.Domains {
+			fmt.Printf("%18s\n", domain)
 		}
 	}
 }

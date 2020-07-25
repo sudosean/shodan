@@ -1,6 +1,6 @@
 package shodan
 
-const BaseURL = "https://api.shodain.io"
+const BaseURL = "https://api.shodan.io"
 
 type Client struct {
 	apiKey string
